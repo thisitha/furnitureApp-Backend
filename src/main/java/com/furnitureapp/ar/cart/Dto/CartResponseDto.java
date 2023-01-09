@@ -10,8 +10,7 @@ import lombok.NoArgsConstructor;
 public class CartResponseDto {
   private  int Id;
   private int userId;
- //private   int productId;
-    private int productId;
+private int productId;
     private String productName;
     private String productColor;
     private String productType;

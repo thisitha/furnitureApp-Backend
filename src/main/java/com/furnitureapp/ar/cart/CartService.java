@@ -27,8 +27,8 @@ public class CartService {
     private ModelMapper modelMapper;
 
 
-    public List<cartDetails> getCartDetails(){
-        List<cartDetails> cartDetailsList = cartRepo.getUserCart();
+    public List<cartDetails> getCartDetails(String uid){
+        List<cartDetails> cartDetailsList = cartRepo.getUserCart(uid);
         return cartDetailsList;
     }
     
@@ -38,9 +38,9 @@ public class CartService {
        return cartDetailsDto;
        //return modelMapper.map(cartDetailsList,  new TypeToken<List<Product>>(){}.getType());
     }
-    public int deletecartItem (String userId, String productId){
+    public int deletecartItem (String userId, String cartId){
         System.out.println(userId);
-        System.out.println(productId);
-        return  cartRepo.deleteCartItem(userId, productId);
+        System.out.println(cartId);
+        return  cartRepo.deleteCartItem(userId, cartId);
     }
 }

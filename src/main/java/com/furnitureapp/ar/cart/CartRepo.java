@@ -16,11 +16,11 @@ import javax.transaction.Transactional;
 
 public interface CartRepo  extends JpaRepository<cartDetails,Integer>{
     
-    @Query(value ="SELECT * FROM cart_details",nativeQuery = true )
-    public List<cartDetails> getUserCart();
+    @Query(value ="SELECT * FROM cart_details WHERE user_id = ?1",nativeQuery = true )
+    public List<cartDetails> getUserCart(String uid);
 
     @Modifying
     @Query
-    (value ="DELETE FROM cart_details WHERE user_id=:userId AND product_id=:productId",nativeQuery = true )
-    public int deleteCartItem(@Param("userId") String userId, @Param("productId") String productIs);
+    (value ="DELETE FROM cart_details WHERE user_id=:userId AND id=:cartId",nativeQuery = true )
+    public int deleteCartItem(@Param("userId") String userId, @Param("cartId") String productIs);
 }

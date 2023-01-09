@@ -30,9 +30,9 @@ public class CartController {
     private ProductService productService;
 
     @GetMapping("/getCart")
-    public ResponseEntity<Object> getCart(@RequestParam String cartType){
-        System.out.println(cartType);
-        List<cartDetails> cartList = cartService.getCartDetails();
+    public ResponseEntity<Object> getCart(@RequestParam String uid){
+        System.out.println(uid);
+        List<cartDetails> cartList = cartService.getCartDetails(uid);
         
         
         Map<String, Object> map = new HashMap<String, Object>();
@@ -56,18 +56,37 @@ public class CartController {
                responseObject.setId(cartList.get(i).getId());
                responseObject.setUserId(cartList.get(i).getUserId());
 
+               ProductDto newProduct = new ProductDto();
+               newProduct = productService.getProductByID(cartList.get(i).getProductId()).get(0);
+
+
                responseObject.setProductId(cartList.get(i).getProductId());
-               responseObject.setProductName(productService.getProductByID(cartList.get(i).getProductId()).get(0).getProductName());
-               responseObject.setProductColor(productService.getProductByID(cartList.get(i).getProductId()).get(0).getProductColor());
-               responseObject.setProductType(productService.getProductByID(cartList.get(i).getProductId()).get(0).getProductType());
-               responseObject.setProductImage1(productService.getProductByID(cartList.get(i).getProductId()).get(0).getProductImage1());
-               responseObject.setProductImage2(productService.getProductByID(cartList.get(i).getProductId()).get(0).getProductImage2());
-               responseObject.setProductImage3(productService.getProductByID(cartList.get(i).getProductId()).get(0).getProductImage3());
-               responseObject.setProductPrice(productService.getProductByID(cartList.get(i).getProductId()).get(0).getProductPrice());
-               responseObject.setProductTag(productService.getProductByID(cartList.get(i).getProductId()).get(0).getProductTag());
-               responseObject.setProductDescription(productService.getProductByID(cartList.get(i).getProductId()).get(0).getProductDescription());
-               responseObject.setProductBestOffer(productService.getProductByID(cartList.get(i).getProductId()).get(0).getProductBestOffer());
+               responseObject.setProductName(newProduct.getProductName());
+               responseObject.setProductColor(newProduct.getProductColor());
+               responseObject.setProductType(newProduct.getProductType());
+               responseObject.setProductImage1(newProduct.getProductImage1());
+               responseObject.setProductImage2(newProduct.getProductImage2());
+               responseObject.setProductImage3(newProduct.getProductImage3());
+               responseObject.setProductPrice(newProduct.getProductPrice());
+               responseObject.setProductTag(newProduct.getProductTag());
+               responseObject.setProductDescription(newProduct.getProductDescription());
+               responseObject.setProductBestOffer(newProduct.getProductBestOffer());
                responseObject.setProductQuantity("10");
+
+
+
+              //  responseObject.setProductId(cartList.get(i).getProductId());
+             //   responseObject.setProductName(productService.getProductByID(cartList.get(i).getProductId()).get(0).getProductName());
+              //  responseObject.setProductColor(productService.getProductByID(cartList.get(i).getProductId()).get(0).getProductColor());
+              //  responseObject.setProductType(productService.getProductByID(cartList.get(i).getProductId()).get(0).getProductType());
+              //  responseObject.setProductImage1(productService.getProductByID(cartList.get(i).getProductId()).get(0).getProductImage1());
+              //  responseObject.setProductImage2(productService.getProductByID(cartList.get(i).getProductId()).get(0).getProductImage2());
+              //  responseObject.setProductImage3(productService.getProductByID(cartList.get(i).getProductId()).get(0).getProductImage3());
+              //  responseObject.setProductPrice(productService.getProductByID(cartList.get(i).getProductId()).get(0).getProductPrice());
+              //  responseObject.setProductTag(productService.getProductByID(cartList.get(i).getProductId()).get(0).getProductTag());
+              //  responseObject.setProductDescription(productService.getProductByID(cartList.get(i).getProductId()).get(0).getProductDescription());
+              //  responseObject.setProductBestOffer(productService.getProductByID(cartList.get(i).getProductId()).get(0).getProductBestOffer());
+              //  responseObject.setProductQuantity("10");
 
 
                responseList.add(responseObject);
@@ -82,12 +101,17 @@ public class CartController {
                 
             
             }
+            if(responseList.isEmpty()){
+              map.put("isSuccess", false);
+            }else{
+              map.put("isSuccess", true);
+            }
             map.put("timestamp", new Date());
-            map.put("isSuccess", true);
-            map.put("productData", "Cart Fetched Successfully");
+           
+            map.put("productData", "Cart Details Recived Successfully");
            map.put("data", responseList);
             // map.put("data", cartObjects);  
-            return new ResponseEntity<Object>(map,HttpStatus.ACCEPTED);
+            return new ResponseEntity<Object>(map,HttpStatus.FORBIDDEN);
 
        
     }
@@ -99,20 +123,20 @@ public class CartController {
         List<Object> cartObjects = new ArrayList<>();
             map.put("timestamp", new Date());
             map.put("isSuccess", true);
-            map.put("productData", "Cart Fetched Successfully");
+            map.put("productData", "Cart Item Added Successfully");
             map.put("data", cartObjects);  
             return new ResponseEntity<Object>(map,HttpStatus.ACCEPTED);
     }
 
     @GetMapping("/deleteCartItem")
-    public ResponseEntity<Object> deleteCartItems(@RequestParam String userId, String productID){
-        cartService.deletecartItem(userId, productID);
+    public ResponseEntity<Object> deleteCartItems(@RequestParam String userId, String cartId){
+        cartService.deletecartItem(userId, cartId);
           Map<String, Object> map = new HashMap<String, Object>();
         List<Object> cartObjects = new ArrayList<>();
         
             map.put("timestamp", new Date());
             map.put("isSuccess", true);
-            map.put("productData", "Cart Fetched Successfully");
+            map.put("productData", "Cart Item Removed Successfully");
             map.put("data", cartObjects);  
             return new ResponseEntity<Object>(map,HttpStatus.ACCEPTED);
 

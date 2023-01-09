@@ -26,9 +26,10 @@ public class UserController {
     public ResponseEntity<Object> registerUser(@RequestBody UserDto userDto){
     
        Map<String, Object> map = new HashMap<String, Object>();
+     try {
         if(userService.registerUser(userDto).getUserEmail()!=null){
             map.put("timestamp", new Date());
-           // map.put("status", "");
+            map.put("status", userDto);
             map.put("isSuccess", true);
             map.put("message", "User Registerd");
              
@@ -43,6 +44,16 @@ public class UserController {
             
             return new ResponseEntity<Object>(map,HttpStatus.FORBIDDEN);
         }  
+     } catch (Exception e) {
+        map.clear();
+        map.put("timestamp", new Date());
+     //   map.put("status", "Failed");
+        map.put("isSuccess",false);
+        map.put("message","User Exists");
+        
+        return new ResponseEntity<Object>(map,HttpStatus.FORBIDDEN);
+        // TODO: handle exception
+     }
     }
 
     @PostMapping("/updateFcm")

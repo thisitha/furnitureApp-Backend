@@ -26,11 +26,7 @@ public class ProductController {
         map.put("items", productService.gerProductList(searchQuery));
         return new ResponseEntity<Object>(map,HttpStatus.ACCEPTED);
     }
-//     @GetMapping("/productList")
-//     public List<ProductDto> getProducts(){
-//             return productService.gerProductList();
-//     }
-    
+
     @GetMapping("/bestOfferProductList")
     public List<ProductDto> getBestOfferProducts(){
             return productService.gerBestOfferProductList();
